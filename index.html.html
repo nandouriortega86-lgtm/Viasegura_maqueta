@@ -1,0 +1,1220 @@
+<!doctype html>
+<html lang="es-MX">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123c44">
+  <meta name="description"
+    content="VíaSegura: maqueta accesible para registrar y consultar riesgos viales en Querétaro.">
+  <title>VíaSegura | Reporta y consulta riesgos viales</title>
+  <style>
+    :root {
+      --ink: #16363c;
+      --deep: #123c44;
+      --deep2: #0c3037;
+      --muted: #50666a;
+      --line: #cbdad7;
+      --paper: #fffdf7;
+      --pale: #eaf3ef;
+      --yellow: #ffd36e;
+      --orange: #b4531e;
+      --focus: #ffad16;
+      --shadow: 0 16px 40px rgba(12, 48, 55, .12)
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 100px
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font: 1rem/1.6 Arial, Helvetica, sans-serif
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit
+    }
+
+    a {
+      color: inherit
+    }
+
+    button {
+      cursor: pointer
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0
+    }
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.18
+    }
+
+    h1 {
+      letter-spacing: -.045em
+    }
+
+    h2 {
+      letter-spacing: -.035em
+    }
+
+    strong {
+      font-weight: 750
+    }
+
+    .wrap {
+      width: min(1160px, calc(100% - 48px));
+      margin-inline: auto
+    }
+
+    .skip-link {
+      position: fixed;
+      top: -100px;
+      left: 16px;
+      padding: 12px 18px;
+      background: var(--yellow);
+      color: #161e1c;
+      font-weight: 700;
+      z-index: 100
+    }
+
+    .skip-link:focus {
+      top: 12px
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--focus) !important;
+      outline-offset: 4px !important
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      border-radius: 3px
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: var(--paper);
+      border-bottom: 1px solid var(--line)
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 32px;
+      min-height: 88px
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-size: 1.3rem;
+      font-weight: 800;
+      line-height: 1;
+      white-space: nowrap
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      position: relative;
+      height: 42px;
+      width: 42px;
+      border-radius: 13px;
+      background: var(--deep);
+      color: white;
+      font-weight: 800;
+      font-size: 1.4rem
+    }
+
+    .brand-mark span {
+      color: var(--yellow);
+      font-size: .7rem;
+      position: absolute;
+      right: 4px;
+      top: 3px
+    }
+
+    .brand-accent {
+      color: #a74b18
+    }
+
+    .brand small {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: .59rem;
+      font-weight: 650;
+      letter-spacing: .07em;
+      text-transform: uppercase
+    }
+
+    .site-header nav {
+      display: flex;
+      gap: 22px;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    .site-header nav a {
+      text-decoration: none;
+      font-size: .89rem;
+      font-weight: 700;
+      padding: 9px 2px;
+      border-bottom: 2px solid transparent
+    }
+
+    .site-header nav a:hover {
+      border-color: var(--orange)
+    }
+
+    .hero {
+      overflow: hidden;
+      background: var(--deep);
+      color: white
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.14fr .86fr;
+      align-items: center;
+      gap: 5%;
+      min-height: 600px;
+      padding-block: 70px
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      font-size: .75rem;
+      font-weight: 850;
+      letter-spacing: .13em;
+      color: #236a60;
+      margin-bottom: 15px
+    }
+
+    .eyebrow.light {
+      color: var(--yellow)
+    }
+
+    .hero h1 {
+      font-size: clamp(2.6rem, 5vw, 4.55rem);
+      max-width: 700px;
+      margin: 0 0 23px
+    }
+
+    .hero h1 em {
+      color: var(--yellow);
+      font-style: normal
+    }
+
+    .hero-lede {
+      font-size: 1.11rem;
+      max-width: 610px;
+      color: #e4eeec
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 13px;
+      margin: 30px 0
+    }
+
+    .button {
+      min-height: 50px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      padding: 11px 19px;
+      font-weight: 800;
+      text-decoration: none;
+      line-height: 1.3
+    }
+
+    .button-primary {
+      background: var(--yellow);
+      color: #222719
+    }
+
+    .button-primary:hover {
+      background: #ffe29d
+    }
+
+    .button-outline {
+      background: transparent;
+      color: white;
+      border-color: #a4c3bd
+    }
+
+    .button-outline:hover {
+      background: #23535a
+    }
+
+    .demo-note {
+      max-width: 610px;
+      color: #e8f5f2;
+      font-size: .86rem
+    }
+
+    .demo-note strong {
+      color: var(--yellow)
+    }
+
+    .intro-strip {
+      border-bottom: 1px solid var(--line);
+      background: #f5faf6
+    }
+
+    .strip-grid {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding-block: 16px
+    }
+
+    .strip-grid p {
+      margin: 0;
+      font-size: .87rem;
+      font-weight: 650
+    }
+
+    .strip-grid strong {
+      color: #876019;
+      margin-right: 8px
+    }
+
+    .section {
+      padding-block: 94px
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 38px;
+      margin-bottom: 34px
+    }
+
+    .section-heading h2 {
+      font-size: clamp(2rem, 3.2vw, 3rem);
+      max-width: 720px;
+      margin: 0
+    }
+
+    .section-heading>p {
+      max-width: 315px;
+      color: var(--muted);
+      margin: 0
+    }
+
+    .steps {
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      list-style: none
+    }
+
+    .steps li {
+      min-height: 224px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 23px;
+      background: #fff
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      background: #dcebe5;
+      border-radius: 12px;
+      font-weight: 800;
+      color: #165246
+    }
+
+    .steps h3 {
+      font-size: 1.2rem;
+      margin: 20px 0 8px
+    }
+
+    .steps p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .92rem
+    }
+
+    .pale {
+      background: var(--pale)
+    }
+
+    .reports-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px 14px;
+      margin-bottom: 26px
+    }
+
+    .reports-toolbar label {
+      font-weight: 800
+    }
+
+    .reports-toolbar select {
+      min-width: 230px;
+      max-width: 100%;
+      padding: 10px;
+      border: 2px solid #5b7d79;
+      border-radius: 8px;
+      background: white
+    }
+
+    .counter {
+      margin-left: auto;
+      font-weight: 750;
+      color: #275349
+    }
+
+    .reports-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 17px
+    }
+
+    .report-card {
+      background: white;
+      padding: 23px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 5px 18px #143c3c0d
+    }
+
+    .report-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 10px
+    }
+
+    .report-card h3 {
+      font-size: 1.19rem;
+      margin: 0 0 10px
+    }
+
+    .report-card p {
+      margin-bottom: 10px
+    }
+
+    .report-card .where {
+      font-weight: 750
+    }
+
+    .report-card .description {
+      color: var(--muted);
+      overflow-wrap: anywhere
+    }
+
+    .report-card .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px
+    }
+
+    .chip {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 99px;
+      background: #eaf2ef;
+      color: #173f3d;
+      font-size: .78rem;
+      font-weight: 750
+    }
+
+    .chip.example {
+      background: #f4e9d6;
+      color: #694317
+    }
+
+    .chip.high {
+      background: #fae2de;
+      color: #722b1d
+    }
+
+    .chip.medium {
+      background: #fff0cd;
+      color: #6b4a00
+    }
+
+    .chip.low {
+      background: #e3f1e9;
+      color: #225539
+    }
+
+    .report-id {
+      font-size: .72rem;
+      color: var(--muted);
+      font-weight: 750;
+      white-space: nowrap
+    }
+
+    .empty-state {
+      padding: 20px;
+      border: 1px dashed #71968d;
+      border-radius: 9px
+    }
+
+    .report-section {
+      padding-bottom: 108px
+    }
+
+    .form-layout {
+      display: grid;
+      grid-template-columns: .72fr 1.28fr;
+      gap: 33px
+    }
+
+    .form-aside {
+      background: #f0f3e9;
+      border-radius: 16px;
+      padding: 30px;
+      align-self: start
+    }
+
+    .aside-badge {
+      display: grid;
+      place-items: center;
+      width: 53px;
+      height: 53px;
+      border-radius: 14px;
+      background: var(--yellow);
+      font-size: 1.8rem;
+      font-weight: 800
+    }
+
+    .form-aside h3 {
+      font-size: 1.55rem;
+      margin: 26px 0 12px
+    }
+
+    .form-aside p {
+      color: #3e5554
+    }
+
+    .privacy-note {
+      border-top: 1px solid #bdcfca;
+      padding-top: 20px;
+      margin-top: 35px;
+      font-size: .92rem
+    }
+
+    .report-form {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: white;
+      padding: 31px;
+      box-shadow: var(--shadow)
+    }
+
+    .fields-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 17px
+    }
+
+    .field {
+      margin-bottom: 20px
+    }
+
+    .field label {
+      display: block;
+      font-weight: 800;
+      margin-bottom: 6px
+    }
+
+    .field label span {
+      font-weight: 500;
+      color: #465d61;
+      font-size: .85rem
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      display: block;
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #678987;
+      border-radius: 8px;
+      background: white;
+      color: var(--ink)
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: #556767
+    }
+
+    .field-help {
+      font-size: .82rem;
+      color: #50666a;
+      margin: 6px 0 0
+    }
+
+    .location-row {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: -2px 0 20px
+    }
+
+    .text-button {
+      color: #155b59;
+      border: 0;
+      background: none;
+      padding: 6px 0;
+      text-decoration: underline;
+      font-weight: 800
+    }
+
+    .text-button:hover {
+      text-decoration-thickness: 3px
+    }
+
+    .form-footer {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px
+    }
+
+    .form-footer p {
+      font-size: .84rem;
+      color: var(--muted);
+      margin: 0
+    }
+
+    .form-result {
+      margin-top: 22px;
+      padding: 17px;
+      border-left: 5px solid #24835d;
+      background: #e8f6e9;
+      border-radius: 3px
+    }
+
+    .form-result strong {
+      display: block
+    }
+
+    .access-section {
+      background: var(--deep2);
+      color: white
+    }
+
+    .access-section .section-heading>p {
+      color: #d7e5e1
+    }
+
+    .pour-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px
+    }
+
+    .pour-grid article {
+      background: #1b4c50;
+      border: 1px solid #6d9793;
+      border-radius: 12px;
+      padding: 24px
+    }
+
+    .pour-grid .letter {
+      display: grid;
+      place-items: center;
+      width: 43px;
+      height: 43px;
+      border-radius: 50%;
+      color: #153638;
+      background: var(--yellow);
+      font-weight: 900
+    }
+
+    .pour-grid h3 {
+      font-size: 1.14rem;
+      margin: 20px 0 10px
+    }
+
+    .pour-grid p {
+      margin: 0;
+      color: #e8f3ef;
+      font-size: .9rem
+    }
+
+    .site-footer {
+      background: #08282d;
+      color: #e7f2f0
+    }
+
+    .footer-inner {
+      padding-block: 31px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px
+    }
+
+    .footer-inner p {
+      margin: 0;
+      font-size: .85rem
+    }
+
+    .footer-inner a {
+      font-weight: 800;
+      color: var(--yellow)
+    }
+
+    @media(max-width:920px) {
+      .header-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        padding-block: 13px;
+        gap: 9px
+      }
+
+      .site-header nav {
+        gap: 6px 17px
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+        min-height: unset
+      }
+
+      .steps,
+      .pour-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .reports-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .form-layout {
+        grid-template-columns: 1fr
+      }
+
+      .form-aside {
+        padding: 25px
+      }
+
+      .section {
+        padding-block: 72px
+      }
+    }
+
+    @media(max-width:590px) {
+      .wrap {
+        width: min(100% - 32px, 1160px)
+      }
+
+      .header-inner {
+        min-height: unset
+      }
+
+      .site-header nav {
+        gap: 1px 12px
+      }
+
+      .site-header nav a {
+        font-size: .77rem;
+        padding: 6px 0
+      }
+
+      .hero-grid {
+        padding-block: 58px 42px
+      }
+
+      .hero h1 {
+        font-size: 2.55rem
+      }
+
+      .intro-strip {
+        display: none
+      }
+
+      .section-heading {
+        display: block
+      }
+
+      .section-heading>p {
+        margin-top: 12px
+      }
+
+      .steps,
+      .pour-grid,
+      .reports-grid,
+      .fields-two {
+        grid-template-columns: 1fr
+      }
+
+      .steps li {
+        min-height: unset
+      }
+
+      .counter {
+        margin-left: 0;
+        width: 100%
+      }
+
+      .report-form {
+        padding: 22px
+      }
+
+      .section {
+        padding-block: 60px
+      }
+
+      .footer-inner {
+        display: block
+      }
+
+      .footer-inner>* {
+        margin: 0 0 12px !important
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+      html {
+        scroll-behavior: auto
+      }
+
+      *,
+      *:before,
+      *:after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important
+      }
+    }
+
+    .hero-map {
+      border: 1px solid #79a5a2;
+      border-radius: 22px;
+      overflow: hidden;
+      background: #e8f0e9;
+      color: var(--ink);
+      box-shadow: var(--shadow)
+    }
+
+    .map-embed {
+      display: block;
+      width: 100%;
+      height: 350px;
+      border: 0;
+      background: #e8f0e9
+    }
+
+    .map-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px 16px;
+      flex-wrap: wrap;
+      padding: 14px 17px;
+      background: var(--paper);
+      font-size: .84rem;
+      line-height: 1.4
+    }
+
+    .map-footer span {
+      font-weight: 700
+    }
+
+    .map-footer a {
+      color: #135754;
+      font-weight: 800;
+      text-underline-offset: 3px
+    }
+
+    .map-credit {
+      padding: 0 17px 12px;
+      margin: 0;
+      background: var(--paper);
+      color: #405b5d;
+      font-size: .74rem
+    }
+
+    .map-credit a {
+      color: #135754;
+      text-underline-offset: 2px
+    }
+
+    @media(max-width:590px) {
+      .map-embed {
+        height: 280px
+      }
+
+      .map-footer {
+        padding: 12px 14px
+      }
+
+      .map-credit {
+        padding: 0 14px 12px
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido principal</a>
+  <header class="site-header">
+    <div class="header-inner wrap">
+      <a class="brand" href="#inicio" aria-label="VíaSegura, ir al inicio"><span class="brand-mark"
+          aria-hidden="true">V<span>↗</span></span><span>Vía<span class="brand-accent">Segura</span><small>Querétaro ·
+            maqueta ciudadana</small></span></a>
+      <nav aria-label="Navegación principal">
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#reportes">Explorar reportes</a>
+        <a href="#reportar">Crear reporte</a>
+        <a href="#accesibilidad">Accesibilidad</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido" tabindex="-1">
+    <section id="inicio" class="hero" aria-labelledby="titulo-inicio">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow light">Seguridad vial · Querétaro</p>
+          <h1 id="titulo-inicio">Una calle más segura empieza con <em>un reporte claro.</em></h1>
+          <p class="hero-lede">Identifica baches, señalización dañada y otros riesgos. Registra el lugar, explica qué
+            sucede y consulta los reportes de esta maqueta.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#reportar">Crear un reporte <span aria-hidden="true">↗</span></a>
+            <a class="button button-outline" href="#reportes">Ver reportes</a>
+          </div>
+          <p class="demo-note"><strong>Demostración académica:</strong> los reportes se guardan únicamente en este
+            navegador. No se envían a autoridades.</p>
+        </div>
+        <div class="hero-map">
+          <iframe class="map-embed" title="Mapa interactivo de Querétaro; puedes moverlo y ampliar la vista"
+            src="https://www.openstreetmap.org/export/embed.html?bbox=-100.45%2C20.54%2C-100.33%2C20.64&amp;layer=mapnik"
+            loading="eager" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div class="map-footer"><span>Mapa de referencia · Los reportes no se muestran aquí.</span><a
+              href="https://www.openstreetmap.org/?#map=13/20.59/-100.39" target="_blank"
+              rel="noopener noreferrer">Abrir mapa completo ↗</a></div>
+          <p class="map-credit">Datos del mapa: <a href="https://www.openstreetmap.org/copyright/es" target="_blank"
+              rel="noopener noreferrer">© colaboradores de OpenStreetMap</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="intro-strip" aria-label="Beneficios de VíaSegura">
+      <div class="wrap strip-grid">
+        <p><strong>01</strong> Reportes fáciles de crear</p>
+        <p><strong>02</strong> Información clara para todos</p>
+        <p><strong>03</strong> Consulta sin abrir una cuenta</p>
+      </div>
+    </section>
+
+    <section id="como-funciona" class="section wrap" aria-labelledby="titulo-como">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Un proceso sencillo</p>
+          <h2 id="titulo-como">Así funciona VíaSegura</h2>
+        </div>
+        <p>Cuatro pasos, sin formularios confusos ni tiempos límite.</p>
+      </div>
+      <ol class="steps">
+        <li><span class="step-number">01</span>
+          <h3>Identifica</h3>
+          <p>Detecta un bache, obstáculo, señal dañada u otro riesgo de la calle.</p>
+        </li>
+        <li><span class="step-number">02</span>
+          <h3>Ubica</h3>
+          <p>Escribe una calle y referencia. La ubicación del dispositivo es opcional.</p>
+        </li>
+        <li><span class="step-number">03</span>
+          <h3>Describe</h3>
+          <p>Selecciona el riesgo y explica lo necesario con palabras sencillas.</p>
+        </li>
+        <li><span class="step-number">04</span>
+          <h3>Consulta</h3>
+          <p>Revisa la lista de reportes y filtra los casos por tipo.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section id="reportes" class="section pale" aria-labelledby="titulo-reportes">
+      <div class="wrap">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Información compartida</p>
+            <h2 id="titulo-reportes">Reportes viales</h2>
+          </div>
+          <p>Los casos iniciales están marcados como ejemplos. Los que crees aquí se guardan solo en tu navegador.</p>
+        </div>
+        <div class="reports-toolbar"><label for="filtro">Filtrar por tipo</label><select id="filtro">
+            <option value="todos">Todos los tipos</option>
+            <option value="Bache">Baches</option>
+            <option value="Señalización dañada">Señalización dañada</option>
+            <option value="Obstáculo en la vía">Obstáculos en la vía</option>
+            <option value="Alumbrado deficiente">Alumbrado deficiente</option>
+            <option value="Otro riesgo">Otros riesgos</option>
+          </select><span id="contador" class="counter" role="status" aria-live="polite"></span></div>
+        <div id="lista-reportes" class="reports-grid" aria-live="off"></div>
+        <p id="sin-resultados" class="empty-state" hidden>No hay reportes de ese tipo. Selecciona otro filtro o crea uno
+          nuevo.</p>
+      </div>
+    </section>
+
+    <section id="reportar" class="section wrap report-section" aria-labelledby="titulo-reportar">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Tu observación puede ayudar</p>
+          <h2 id="titulo-reportar">Crear un reporte</h2>
+        </div>
+        <p>Los campos obligatorios se indican con texto, además de usar la validación del navegador.</p>
+      </div>
+      <div class="form-layout">
+        <aside class="form-aside">
+          <div class="aside-badge" aria-hidden="true">↗</div>
+          <h3>Describe el lugar con precisión.</h3>
+          <p>Una calle, colonia o punto de referencia ayuda a entender dónde se encuentra el riesgo.</p>
+          <p>Si eliges usar tu ubicación, el navegador solicitará permiso. También puedes escribir el lugar manualmente.
+          </p>
+          <p class="privacy-note"><strong>Privacidad:</strong> esta versión no envía datos a ningún servidor. Evita
+            escribir nombres, teléfonos o datos personales.</p>
+        </aside>
+        <form id="form-reporte" class="report-form">
+          <div class="fields-two">
+            <div class="field"><label for="tipo">Tipo de problema <span>(obligatorio)</span></label><select id="tipo"
+                name="tipo" required>
+                <option value="">Selecciona un tipo</option>
+                <option>Bache</option>
+                <option>Señalización dañada</option>
+                <option>Obstáculo en la vía</option>
+                <option>Alumbrado deficiente</option>
+                <option>Otro riesgo</option>
+              </select></div>
+            <div class="field"><label for="riesgo">Nivel de riesgo <span>(obligatorio)</span></label><select id="riesgo"
+                name="riesgo" required>
+                <option value="">Selecciona un nivel</option>
+                <option>Bajo</option>
+                <option>Medio</option>
+                <option>Alto</option>
+              </select></div>
+          </div>
+          <div class="field"><label for="ubicacion">Calle, colonia o referencia <span>(obligatorio)</span></label><input
+              id="ubicacion" name="ubicacion" type="text" autocomplete="street-address" maxlength="100"
+              aria-describedby="ayuda-ubicacion" required placeholder="Ejemplo: Av. Universidad, junto al parque">
+            <p id="ayuda-ubicacion" class="field-help">Puedes escribirla sin permitir acceso a tu ubicación.</p>
+          </div>
+          <div class="location-row"><button type="button" id="usar-ubicacion" class="text-button">Usar mi ubicación
+              actual</button><span id="mensaje-ubicacion" class="field-help" role="status" aria-live="polite"></span>
+          </div>
+          <div class="field"><label for="descripcion">Descripción del problema
+              <span>(obligatorio)</span></label><textarea id="descripcion" name="descripcion" rows="5" minlength="10"
+              maxlength="400" aria-describedby="ayuda-descripcion" required
+              placeholder="Cuenta qué sucede y cómo afecta el paso por la zona"></textarea>
+            <p id="ayuda-descripcion" class="field-help">Escribe al menos 10 caracteres. No incluyas datos personales.
+            </p>
+          </div>
+          <div class="form-footer"><button class="button button-primary" type="submit">Guardar reporte de prueba <span
+                aria-hidden="true">↗</span></button>
+            <p>Al guardarlo aparecerá en la lista de esta página.</p>
+          </div>
+          <div id="resultado-envio" class="form-result" role="status" aria-live="polite" tabindex="-1" hidden></div>
+        </form>
+      </div>
+    </section>
+
+    <section id="accesibilidad" class="section access-section" aria-labelledby="titulo-pour">
+      <div class="wrap">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow light">Accesibilidad desde el diseño</p>
+            <h2 id="titulo-pour">Cuatro principios. Una web para más personas.</h2>
+          </div>
+          <p>POUR organiza la accesibilidad en perceptible, operable, comprensible y robusto.</p>
+        </div>
+        <div class="pour-grid">
+          <article><span class="letter">P</span>
+            <h3>Perceptible</h3>
+            <p>Textos legibles, contraste, etiquetas y estados escritos; el significado no depende solo del color.</p>
+          </article>
+          <article><span class="letter">O</span>
+            <h3>Operable</h3>
+            <p>Se puede recorrer con teclado, hay foco visible y un enlace para saltar al contenido.</p>
+          </article>
+          <article><span class="letter">U</span>
+            <h3>Comprensible</h3>
+            <p>Lenguaje directo, cuatro pasos y ayudas claras en cada campo del formulario.</p>
+          </article>
+          <article><span class="letter">R</span>
+            <h3>Robusto</h3>
+            <p>HTML semántico, etiquetas vinculadas a controles y mensajes anunciados a tecnologías de apoyo.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p><strong>VíaSegura</strong><br>Maqueta académica · Querétaro, México</p>
+      <p>Los reportes de demostración no se envían a autoridades.</p><a href="#inicio">Volver al inicio ↑</a>
+    </div>
+  </footer>
+  <script>
+    /* VíaSegura: demostración local. No hay conexión con un servidor. */
+    const CLAVE = "viasegura-reportes-v1";
+    const ejemplos = [
+      { id: "EJ-101", tipo: "Bache", riesgo: "Alto", ubicacion: "Av. Universidad, Centro Histórico", descripcion: "Bache amplio junto al cruce peatonal.", fecha: "Ejemplo de maqueta", ejemplo: true },
+      { id: "EJ-102", tipo: "Señalización dañada", riesgo: "Medio", ubicacion: "Blvd. Bernardo Quintana, Querétaro", descripcion: "Señal inclinada cerca de la incorporación.", fecha: "Ejemplo de maqueta", ejemplo: true },
+      { id: "EJ-103", tipo: "Obstáculo en la vía", riesgo: "Bajo", ubicacion: "Col. Carretas, Querétaro", descripcion: "Rama caída en un carril lateral.", fecha: "Ejemplo de maqueta", ejemplo: true }
+    ];
+
+    let guardados = [];
+    try {
+      const datos = JSON.parse(localStorage.getItem(CLAVE) || "[]");
+      if (Array.isArray(datos)) guardados = datos.filter(caso => caso && typeof caso.tipo === "string");
+    } catch (_) {
+      // Si el navegador bloquea el almacenamiento, la página sigue funcionando esta sesión.
+    }
+
+    const lista = document.getElementById("lista-reportes");
+    const filtro = document.getElementById("filtro");
+    const contador = document.getElementById("contador");
+    const vacio = document.getElementById("sin-resultados");
+    const formulario = document.getElementById("form-reporte");
+    const resultado = document.getElementById("resultado-envio");
+
+    function elemento(etiqueta, clase, texto) {
+      const nuevo = document.createElement(etiqueta);
+      if (clase) nuevo.className = clase;
+      if (texto !== undefined) nuevo.textContent = texto;
+      return nuevo;
+    }
+
+    function tarjeta(caso) {
+      const articulo = elemento("article", "report-card");
+      const superior = elemento("div", "report-card-top");
+      superior.append(elemento("h3", "", caso.tipo));
+      superior.append(elemento("span", "report-id", caso.id));
+      articulo.append(superior);
+      articulo.append(elemento("p", "where", caso.ubicacion));
+      articulo.append(elemento("p", "description", caso.descripcion));
+      const metadatos = elemento("div", "meta");
+      metadatos.append(elemento("span", "chip " + caso.riesgo.toLowerCase().replace("alto", "high").replace("medio", "medium").replace("bajo", "low"), "Riesgo " + caso.riesgo.toLowerCase()));
+      metadatos.append(elemento("span", "chip " + (caso.ejemplo ? "example" : ""), caso.ejemplo ? "Caso de ejemplo" : "Guardado aquí"));
+      articulo.append(metadatos);
+      articulo.append(elemento("small", "field-help", caso.fecha));
+      return articulo;
+    }
+
+    function actualizarReportes() {
+      const tipo = filtro.value;
+      const casos = [...guardados].reverse().concat(ejemplos).filter(caso => tipo === "todos" || caso.tipo === tipo);
+      lista.replaceChildren(...casos.map(tarjeta));
+      contador.textContent = casos.length + (casos.length === 1 ? " reporte visible" : " reportes visibles");
+      vacio.hidden = casos.length !== 0;
+    }
+
+    filtro.addEventListener("change", actualizarReportes);
+
+    formulario.addEventListener("submit", evento => {
+      evento.preventDefault();
+      if (!formulario.reportValidity()) return;
+      const tipo = document.getElementById("tipo").value;
+      const riesgo = document.getElementById("riesgo").value;
+      const ubicacion = document.getElementById("ubicacion").value.trim();
+      const descripcion = document.getElementById("descripcion").value.trim();
+      if (!ubicacion || descripcion.length < 10) {
+        document.getElementById(!ubicacion ? "ubicacion" : "descripcion").focus();
+        return;
+      }
+
+      const caso = {
+        id: "VS-" + Date.now().toString(36).toUpperCase(), tipo, riesgo, ubicacion, descripcion,
+        fecha: new Intl.DateTimeFormat("es-MX", { dateStyle: "medium", timeStyle: "short" }).format(new Date()),
+        ejemplo: false
+      };
+      guardados.push(caso);
+      let persistido = true;
+      try { localStorage.setItem(CLAVE, JSON.stringify(guardados)); }
+      catch (_) { persistido = false; }
+      filtro.value = "todos";
+      actualizarReportes();
+      formulario.reset();
+      resultado.replaceChildren();
+      resultado.append(elemento("strong", "", "Reporte " + caso.id + " agregado a la lista."));
+      resultado.append(document.createTextNode(persistido
+        ? " Puedes consultarlo en esta página; se guardó en este navegador. No se envió a ninguna autoridad."
+        : " Puedes consultarlo durante esta sesión. Tu navegador impidió guardarlo de forma permanente."));
+      resultado.hidden = false;
+      resultado.focus();
+    });
+
+    const botonUbicacion = document.getElementById("usar-ubicacion");
+    const mensajeUbicacion = document.getElementById("mensaje-ubicacion");
+    botonUbicacion.addEventListener("click", () => {
+      if (!navigator.geolocation) {
+        mensajeUbicacion.textContent = "Este navegador no admite ubicación. Escribe el lugar manualmente.";
+        return;
+      }
+      botonUbicacion.disabled = true;
+      mensajeUbicacion.textContent = "Solicitando permiso al navegador…";
+      navigator.geolocation.getCurrentPosition(
+        posicion => {
+          const lat = posicion.coords.latitude.toFixed(5);
+          const lon = posicion.coords.longitude.toFixed(5);
+          document.getElementById("ubicacion").value = "Coordenadas: " + lat + ", " + lon;
+          mensajeUbicacion.textContent = "Coordenadas agregadas. Puedes completarlas con una calle o referencia.";
+          botonUbicacion.disabled = false;
+        },
+        () => {
+          mensajeUbicacion.textContent = "No se obtuvo la ubicación. Puedes escribir el lugar manualmente.";
+          botonUbicacion.disabled = false;
+        },
+        { timeout: 10000, maximumAge: 0, enableHighAccuracy: false }
+      );
+    });
+
+    actualizarReportes();
+
+  </script>
+</body>
+
+</html>
